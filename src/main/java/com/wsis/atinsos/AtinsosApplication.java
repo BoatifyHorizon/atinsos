@@ -9,5 +9,4 @@ public class AtinsosApplication {
     public static void main(String[] args) {
         SpringApplication.run(AtinsosApplication.class, args);
     }
-
 }

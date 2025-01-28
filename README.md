@@ -1,3 +1,14 @@
-### How to db
-1. Locate to hsqldb/lib catalog where hsqldb.jar exists.
-2. Simply run db with `java -cp hsqldb.jar org.hsqldb.Server --database.0 file:PATH/TO/DB --dbname.0 sosdb`
+### How to run
+1. Go to database directory
+2. Execute `java -classpath lib/hsqldb.jar org.hsqldb.server.Server --database.0 file:hsqldb/hemrajdb --dbname.0 atinsos_db`
+3. Run the java application
+
+### How to run DBMS
+1. Go to database directory
+2. Execute `java -classpath lib/hsqldb.jar org.hsqldb.util.DatabaseManagerSwing`
+
+### Useful endpoints
+- GET `http://localhost:8080/dbtest` - Test if the connection to db i working
+
+### Todo
+- [ ] Consider if this database folder could be downsized
