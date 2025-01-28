@@ -1,5 +1,3 @@
-drop schema public cascade;
-
 drop table WYDZIAL if exists;
 CREATE TABLE WYDZIAL (
                          ID INTEGER PRIMARY KEY,
