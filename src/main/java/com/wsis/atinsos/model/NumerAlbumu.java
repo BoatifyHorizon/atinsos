@@ -17,16 +17,16 @@ public class NumerAlbumu {
     private Boolean wazny;
 
     @ManyToOne
-    @JoinColumn(name = "UZYTKOWNIK_ID") // FK to UZYTKOWNIK(ID)
+    @JoinColumn(name = "UZYTKOWNIK_ID")
     private Uzytkownik uzytkownik;
 
     public NumerAlbumu() {
     }
 
-    // Getters & setters
     public Integer getId() {
         return id;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -34,6 +34,7 @@ public class NumerAlbumu {
     public String getNumerAlbumu() {
         return numerAlbumu;
     }
+
     public void setNumerAlbumu(String numerAlbumu) {
         this.numerAlbumu = numerAlbumu;
     }
@@ -41,6 +42,7 @@ public class NumerAlbumu {
     public Boolean getWazny() {
         return wazny;
     }
+
     public void setWazny(Boolean wazny) {
         this.wazny = wazny;
     }
@@ -48,6 +50,7 @@ public class NumerAlbumu {
     public Uzytkownik getUzytkownik() {
         return uzytkownik;
     }
+
     public void setUzytkownik(Uzytkownik uzytkownik) {
         this.uzytkownik = uzytkownik;
     }

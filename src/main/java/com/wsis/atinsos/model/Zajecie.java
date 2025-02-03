@@ -12,7 +12,7 @@ public class Zajecie {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "PRZEDMIOT_ID")  // references PRZEDMIOT(ID)
+    @JoinColumn(name = "PRZEDMIOT_ID")
     private Przedmiot przedmiot;
 
     @Column(name = "ROZPOCZECIE")
@@ -24,10 +24,10 @@ public class Zajecie {
     public Zajecie() {
     }
 
-    // Getters & setters
     public Integer getId() {
         return id;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -35,6 +35,7 @@ public class Zajecie {
     public Przedmiot getPrzedmiot() {
         return przedmiot;
     }
+
     public void setPrzedmiot(Przedmiot przedmiot) {
         this.przedmiot = przedmiot;
     }
@@ -42,6 +43,7 @@ public class Zajecie {
     public Timestamp getRozpoczecie() {
         return rozpoczecie;
     }
+
     public void setRozpoczecie(Timestamp rozpoczecie) {
         this.rozpoczecie = rozpoczecie;
     }
@@ -49,6 +51,7 @@ public class Zajecie {
     public Timestamp getZakonczenie() {
         return zakonczenie;
     }
+
     public void setZakonczenie(Timestamp zakonczenie) {
         this.zakonczenie = zakonczenie;
     }

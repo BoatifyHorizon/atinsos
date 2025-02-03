@@ -35,11 +35,11 @@ public class Uzytkownik {
     private String nazwisko;
 
     @ManyToOne
-    @JoinColumn(name = "ADRES_ZAMELDOWANIA")  // FK to ADRES(ID)
+    @JoinColumn(name = "ADRES_ZAMELDOWANIA")
     private Adres adresZameldowania;
 
     @ManyToOne
-    @JoinColumn(name = "ADRES_KORESPONDENCYJNY")  // FK to ADRES(ID)
+    @JoinColumn(name = "ADRES_KORESPONDENCYJNY")
     private Adres adresKorespondencyjny;
 
     @Column(name = "BLOKADA_KONTA")
@@ -48,10 +48,6 @@ public class Uzytkownik {
     @Column(name = "CZAS_BLOKADY")
     private Timestamp czasBlokady;
 
-    /**
-     * Many-to-many with Rola via UZYTKOWNIK_ROLA bridging table.
-     * If you want to load the roles from DB in an object graph, you can map it like this:
-     */
     @ManyToMany
     @JoinTable(name = "UZYTKOWNIK_ROLA",
             joinColumns = {@JoinColumn(name = "UZYTKOWNIK_ID")},
@@ -61,7 +57,6 @@ public class Uzytkownik {
     public Uzytkownik() {
     }
 
-    // Getters & setters
     public Integer getId() {
         return id;
     }

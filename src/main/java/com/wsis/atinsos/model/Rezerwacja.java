@@ -28,7 +28,6 @@ public class Rezerwacja {
     public Rezerwacja() {
     }
 
-    // Getters & setters
     public Integer getId() {
         return id;
     }

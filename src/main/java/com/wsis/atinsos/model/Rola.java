@@ -11,7 +11,7 @@ public class Rola {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "WYDZIAL_ID")   // FK to WYDZIAL(ID)
+    @JoinColumn(name = "WYDZIAL_ID")
     private Wydzial wydzial;
 
     @Column(name = "NAZWA", length = 50)
@@ -23,7 +23,6 @@ public class Rola {
     public Rola() {
     }
 
-    // Getters & setters
     public Integer getId() {
         return id;
     }

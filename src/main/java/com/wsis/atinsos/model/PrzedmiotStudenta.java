@@ -12,11 +12,11 @@ public class PrzedmiotStudenta {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "STUDENT_ID")  // references UZYTKOWNIK(ID)
+    @JoinColumn(name = "STUDENT_ID")
     private Uzytkownik student;
 
     @ManyToOne
-    @JoinColumn(name = "PRZEDMIOT_ID") // references PRZEDMIOT(ID)
+    @JoinColumn(name = "PRZEDMIOT_ID")
     private Przedmiot przedmiot;
 
     @Column(name = "CZAS_ZAPISANIA_SIE")
@@ -25,7 +25,6 @@ public class PrzedmiotStudenta {
     public PrzedmiotStudenta() {
     }
 
-    // Getters & setters
     public Integer getId() {
         return id;
     }

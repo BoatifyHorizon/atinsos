@@ -13,11 +13,11 @@ public class Platnosc {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "STUDENT_ID")  // references UZYTKOWNIK(ID)
+    @JoinColumn(name = "STUDENT_ID")
     private Uzytkownik student;
 
     @ManyToOne
-    @JoinColumn(name = "TYP_OPLATY_ID")  // references TYP_OPLATY(ID)
+    @JoinColumn(name = "TYP_OPLATY_ID")
     private TypOplaty typOplaty;
 
     @Column(name = "KWOTA", precision = 10, scale = 2)
@@ -29,7 +29,6 @@ public class Platnosc {
     public Platnosc() {
     }
 
-    // Getters & setters
     public Integer getId() {
         return id;
     }

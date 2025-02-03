@@ -24,7 +24,6 @@ public class ProbaLogowania {
     public ProbaLogowania() {
     }
 
-    // Getters & setters
     public Integer getId() {
         return id;
     }
