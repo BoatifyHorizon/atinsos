@@ -16,7 +16,6 @@ public class PozycjaBiblioteczna {
     public PozycjaBiblioteczna() {
     }
 
-    // Getters & setters
     public Integer getId() {
         return id;
     }

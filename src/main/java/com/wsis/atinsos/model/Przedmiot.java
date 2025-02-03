@@ -36,17 +36,16 @@ public class Przedmiot {
     private String numerSali;
 
     @ManyToOne
-    @JoinColumn(name = "PROWADZACY_ID")  // references UZYTKOWNIK(ID)
+    @JoinColumn(name = "PROWADZACY_ID")
     private Uzytkownik prowadzacy;
 
     @ManyToOne
-    @JoinColumn(name = "WYDZIAL_ID")     // references WYDZIAL(ID)
+    @JoinColumn(name = "WYDZIAL_ID")
     private Wydzial wydzial;
 
     public Przedmiot() {
     }
 
-    // Getters & setters
     public Integer getId() {
         return id;
     }

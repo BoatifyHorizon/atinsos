@@ -31,7 +31,6 @@ public class Wypozyczenie {
     public Wypozyczenie() {
     }
 
-    // Getters & setters
     public Integer getId() {
         return id;
     }
