@@ -1,79 +1,70 @@
 package com.wsis.atinsos;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-import com.wsis.atinsos.model.Wydzial;
-import com.wsis.atinsos.dao.impl.WydzialDaoImpl;
-import jakarta.persistence.EntityManager;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
-class WydzialDaoImplTest {
+import com.wsis.atinsos.dao.impl.WydzialDaoImpl;
+import com.wsis.atinsos.model.Wydzial;
 
-    @InjectMocks
+@SpringBootTest
+@Transactional
+@Rollback(true)
+public class WydzialDaoImplTest {
+
+    @Autowired
     private WydzialDaoImpl wydzialDao;
-
-    @Mock
-    private EntityManager entityManager;
 
     private Wydzial wydzial;
 
     @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+    public void setUp() {
         wydzial = new Wydzial();
         wydzial.setId(1);
         wydzial.setNazwa("Wydzial A");
+
+        wydzialDao.save(wydzial);
     }
 
     @Test
-    void shouldPersistEntity_WhenValidWydzialIsSaved() {
-        var name = "Wydzial A";
-
-        doNothing().when(entityManager).persist(wydzial);
-
-        wydzialDao.save(wydzial);
-
-        verify(entityManager, times(1)).persist(wydzial);
+    public void testSave() {
+        String name = "Wydzial A";
 
         assertNotNull(wydzial.getId());
         assertEquals(name, wydzial.getNazwa());
     }
 
     @Test
-    void shouldReturnWydzial_WhenExistingIdIsProvided() {
-        var id = 1;
-        when(entityManager.find(Wydzial.class, id)).thenReturn(wydzial);
-
+    public void testFindById() {
+        int id = 1;
         Wydzial result = wydzialDao.findById(id);
 
-        assertEquals(wydzial, result);
-        verify(entityManager, times(1)).find(Wydzial.class, id);
+        assertEquals(wydzial, result);    
     }
 
     @Test
-    void shouldMergeEntity_WhenValidWydzialIsUpdated() {
-        var updatedName = "Updated Wydzial";
-        wydzial.setNazwa(updatedName);
-        when(entityManager.merge(wydzial)).thenReturn(wydzial);
-
+    public void testUpdate() {
+        String updatedName = "Updated Wydzial";
+        wydzial.setNazwa(updatedName);    
         wydzialDao.update(wydzial);
-
-        verify(entityManager, times(1)).merge(wydzial);
-
+    
         assertNotNull(wydzial.getId());
         assertEquals(updatedName, wydzial.getNazwa());
     }
 
     @Test
-    void shouldRemoveEntity_WhenWydzialExistsInPersistenceContext() {
-        when(entityManager.contains(wydzial)).thenReturn(true);
-
+    public void testDelete() {     
+        int wydzialId = wydzial.getId();   
         wydzialDao.delete(wydzial);
 
-        verify(entityManager, times(1)).remove(wydzial);
+        Wydzial result = wydzialDao.findById(wydzialId);
+        
+        assertEquals(null, result);
     }
 
 }
