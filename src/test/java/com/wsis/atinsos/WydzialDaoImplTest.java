@@ -38,7 +38,7 @@ public class WydzialDaoImplTest {
         assertNotNull(wydzial.getId());
         assertEquals(name, wydzial.getNazwa());
     }
-    
+
     @Test
     public void testFindById() {
         int id = 1;
@@ -66,5 +66,5 @@ public class WydzialDaoImplTest {
         
         assertEquals(null, result);
     }
-    
+
 }
