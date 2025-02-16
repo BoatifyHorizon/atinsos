@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
 
+import com.wsis.atinsos.IdGenerator;
 import org.springframework.stereotype.Repository;
 
 import com.wsis.atinsos.dao.UzytkownikDao;
@@ -50,7 +51,7 @@ public class UzytkownikDaoImpl extends GenericDaoImpl<Uzytkownik, Integer> imple
 
             // Tworzymy nowy wpis w tabeli łączącej
             PrzedmiotStudenta ps = new PrzedmiotStudenta();
-            ps.setId(Random.class.newInstance().nextInt());
+            ps.setId(IdGenerator.generateNumericId());
             ps.setStudent(uzytkownik);
             ps.setPrzedmiot(przedmiot);
 
