@@ -57,20 +57,17 @@ public class ZarzadzanieKontemDaoImpl implements ZarzadzanieKontemDao {
 
     @Override
     public void resetujHaslo(String email) {
-        // Przykładowo wyszukujemy użytkownika po email
         Uzytkownik u = entityManager.createQuery("SELECT usr FROM Uzytkownik usr WHERE usr.email = :em", Uzytkownik.class).setParameter("em", email).getResultStream().findFirst().orElse(null);
 
         if (u != null) {
-            // Przykład: ustawiamy domyślne hasło "reset123"
-            // lub generujemy losowe hasło i wysyłamy je e-mailem
-            u.setHaslo("reset123");
+            u.setHaslo("reset123"); // lub generujemy losowe hasło i wysyłamy je e-mailem
+            // i.e sendEmail(u.getEmail(), "Nowe hasło: " + noweHaslo);
             entityManager.merge(u);
         }
     }
 
     @Override
     public void aktualizujDaneKonta(Uzytkownik uzytkownik) {
-        // Załóżmy, że obiekt uzytkownik pochodzi z formularza i ma ID
         entityManager.merge(uzytkownik);
     }
 
