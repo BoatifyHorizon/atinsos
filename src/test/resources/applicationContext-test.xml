@@ -7,8 +7,9 @@
                         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
                         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
                         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+    <context:component-scan base-package="com.wsis.atinsos.dao.impl" />
+    <tx:annotation-driven transaction-manager="transactionManager" />
 
-    <context:component-scan base-package="com.wsis.atinsos" />
     <context:annotation-config />
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.hsqldb.jdbcDriver" />
@@ -16,13 +17,10 @@
         <property name="username" value="SA" />
         <property name="password" value="" />
     </bean>
-
-    <tx:annotation-driven />
-    
     <bean id="entityManagerFactoryBean"
         class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource" />
-        <property name="packagesToScan" value="com.wsis.atinsos.model" />
+        <property name="packagesToScan" value="com.wsis.atinsos" />
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
                 <property name="showSql" value="true" />
@@ -31,17 +29,15 @@
         </property>
         <property name="jpaProperties">
             <props>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.hbm2ddl.auto">validate</prop>
             </props>
         </property>
     </bean>
-
-    <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
-
-    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
-
+    <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"
+    />
+    <bean
+        class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactoryBean" />
     </bean>
-
 </beans>
