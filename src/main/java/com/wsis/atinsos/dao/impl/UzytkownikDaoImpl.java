@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.stereotype.Repository;
 
@@ -27,27 +28,66 @@ public class UzytkownikDaoImpl extends GenericDaoImpl<Uzytkownik, Integer> imple
 
     @Override
     public boolean zapiszNaPrzedmiot(int idPrzedmiot, int idUzytkownik) {
-        // Dodac manyToMany i zapis na przedmiot
-        return false;
+        try {
+            Uzytkownik uzytkownik = entityManager.find(Uzytkownik.class, idUzytkownik);
+            Przedmiot przedmiot = entityManager.find(Przedmiot.class, idPrzedmiot);
+
+            // Sprawdzamy, czy obiekt w ogóle istnieje
+            if (uzytkownik == null || przedmiot == null) {
+                return false;
+            }
+
+            // Sprawdzamy, czy już istnieje w tabeli PrzedmiotStudenta
+            TypedQuery<PrzedmiotStudenta> query = entityManager.createQuery("SELECT ps FROM PrzedmiotStudenta ps " + "WHERE ps.student.id = :uId AND ps.przedmiot.id = :pId", PrzedmiotStudenta.class);
+            query.setParameter("uId", idUzytkownik);
+            query.setParameter("pId", idPrzedmiot);
+
+            List<PrzedmiotStudenta> lista = query.getResultList();
+            // Jeśli jest już zarejestrowany na ten przedmiot, nic nie robimy
+            if (!lista.isEmpty()) {
+                return false;
+            }
+
+            // Tworzymy nowy wpis w tabeli łączącej
+            PrzedmiotStudenta ps = new PrzedmiotStudenta();
+            ps.setId(Random.class.newInstance().nextInt());
+            ps.setStudent(uzytkownik);
+            ps.setPrzedmiot(przedmiot);
+
+            entityManager.persist(ps);
+            return true;
+        } catch (Exception e) {
+            throw new Error("Błąd przy zapisywaniu na przedmiot", e);
+        }
     }
 
     @Override
     public boolean wypiszZPrzedmiot(int idPrzedmiot, int idUzytkownik) {
-        // Dodac manyToMany i wypis z przedmiot
-        return false;
+        try {
+            TypedQuery<PrzedmiotStudenta> query = entityManager.createQuery("SELECT ps FROM PrzedmiotStudenta ps " + "WHERE ps.student.id = :uId AND ps.przedmiot.id = :pId", PrzedmiotStudenta.class);
+            query.setParameter("uId", idUzytkownik);
+            query.setParameter("pId", idPrzedmiot);
+
+            List<PrzedmiotStudenta> lista = query.getResultList();
+            if (lista.isEmpty()) {
+                return false; // student nie był zapisany
+            }
+
+            // Wypisujemy (usuwamy) wszystkie pasujące wiersze
+            for (PrzedmiotStudenta ps : lista) {
+                entityManager.remove(ps);
+            }
+            return true;
+        } catch (Exception e) {
+            throw new Error("Błąd przy wypisywaniu z przedmiotu", e);
+        }
     }
+
 
     @Override
     public double zwrocOcenaZPrzedmiot(int idPrzedmiot, int idUzytkownik) {
         try {
-            TypedQuery<BigDecimal> query = entityManager.createQuery(
-                    "SELECT o.wartosc FROM Ocena o " +
-                            "JOIN o.przedmiotStudenta ps " +
-                            "WHERE ps.przedmiot.id = :idPrzedmiot " +
-                            "AND ps.student.id = :idUzytkownik",
-                    BigDecimal.class)
-                    .setParameter("studentId", idUzytkownik)
-                    .setParameter("przedmiotId", idPrzedmiot);
+            TypedQuery<BigDecimal> query = entityManager.createQuery("SELECT o.wartosc FROM Ocena o " + "JOIN o.przedmiotStudenta ps " + "WHERE ps.przedmiot.id = :idPrzedmiot " + "AND ps.student.id = :idUzytkownik", BigDecimal.class).setParameter("idUzytkownik", idUzytkownik).setParameter("idPrzedmiot", idPrzedmiot);
 
             BigDecimal result = query.getSingleResult();
 
@@ -60,19 +100,13 @@ public class UzytkownikDaoImpl extends GenericDaoImpl<Uzytkownik, Integer> imple
     @Override
     public List<Przedmiot> zwrocListePrzypisanychPrzedmitow(int idUzytkownik) {
         try {
-            TypedQuery<PrzedmiotStudenta> queryPrzedmiotStudenta = entityManager.createQuery(
-                    "SELECT ps FROM PrzedmiotStudenta ps WHERE ps.student.id = :idUzytkownik",
-                    PrzedmiotStudenta.class);
+            TypedQuery<PrzedmiotStudenta> queryPrzedmiotStudenta = entityManager.createQuery("SELECT ps FROM PrzedmiotStudenta ps WHERE ps.student.id = :idUzytkownik", PrzedmiotStudenta.class);
             queryPrzedmiotStudenta.setParameter("idUzytkownik", idUzytkownik);
             List<PrzedmiotStudenta> przedmiotStudentaList = queryPrzedmiotStudenta.getResultList();
 
-            List<Integer> idPrzedmiotList = przedmiotStudentaList.stream()
-                    .map(ps -> ps.getPrzedmiot().getId())
-                    .toList();
+            List<Integer> idPrzedmiotList = przedmiotStudentaList.stream().map(ps -> ps.getPrzedmiot().getId()).toList();
 
-            TypedQuery<Przedmiot> queryPrzedmiot = entityManager.createQuery(
-                    "SELECT p FROM Przedmiot p WHERE p.id IN :idPrzedmiotList",
-                    Przedmiot.class);
+            TypedQuery<Przedmiot> queryPrzedmiot = entityManager.createQuery("SELECT p FROM Przedmiot p WHERE p.id IN :idPrzedmiotList", Przedmiot.class);
             queryPrzedmiot.setParameter("idPrzedmiotList", idPrzedmiotList);
 
             return queryPrzedmiot.getResultList();
@@ -90,19 +124,13 @@ public class UzytkownikDaoImpl extends GenericDaoImpl<Uzytkownik, Integer> imple
     @Override
     public List<PozycjaBiblioteczna> zwrocListeWypozyczonychPozycjaBiblioteczna(int idUzytkownik) {
         try {
-            TypedQuery<Wypozyczenie> queryWypozyczenie = entityManager.createQuery(
-                    "SELECT w FROM Wypozyczenie w WHERE w.uzytkownik.id = :idUzytkownik",
-                    Wypozyczenie.class);
+            TypedQuery<Wypozyczenie> queryWypozyczenie = entityManager.createQuery("SELECT w FROM Wypozyczenie w WHERE w.uzytkownik.id = :idUzytkownik", Wypozyczenie.class);
             queryWypozyczenie.setParameter("idUzytkownik", idUzytkownik);
             List<Wypozyczenie> wypozyczenieList = queryWypozyczenie.getResultList();
 
-            List<Integer> idPozycjaBibliotecznaList = wypozyczenieList.stream()
-                    .map(w -> w.getPozycjaBiblioteczna().getId())
-                    .toList();
+            List<Integer> idPozycjaBibliotecznaList = wypozyczenieList.stream().map(w -> w.getPozycjaBiblioteczna().getId()).toList();
 
-            TypedQuery<PozycjaBiblioteczna> queryPozycjaBiblioteczna = entityManager.createQuery(
-                    "SELECT pb FROM PozycjaBiblioteczna pb WHERE pb.id IN :idPozycjaBibliotecznaList",
-                    PozycjaBiblioteczna.class);
+            TypedQuery<PozycjaBiblioteczna> queryPozycjaBiblioteczna = entityManager.createQuery("SELECT pb FROM PozycjaBiblioteczna pb WHERE pb.id IN :idPozycjaBibliotecznaList", PozycjaBiblioteczna.class);
             queryPozycjaBiblioteczna.setParameter("idPozycjaBibliotecznaList", idPozycjaBibliotecznaList);
 
             return queryPozycjaBiblioteczna.getResultList();
@@ -116,19 +144,13 @@ public class UzytkownikDaoImpl extends GenericDaoImpl<Uzytkownik, Integer> imple
         try {
             Date currentDate = Date.valueOf(LocalDate.now());
 
-            TypedQuery<Wypozyczenie> queryWypozyczenie = entityManager.createQuery(
-                    "SELECT w FROM Wypozyczenie w WHERE w.terminZwrotu > :currentDate",
-                    Wypozyczenie.class);
+            TypedQuery<Wypozyczenie> queryWypozyczenie = entityManager.createQuery("SELECT w FROM Wypozyczenie w WHERE w.terminZwrotu > :currentDate", Wypozyczenie.class);
             queryWypozyczenie.setParameter("currentDate", currentDate);
             List<Wypozyczenie> wypozyczenieList = queryWypozyczenie.getResultList();
 
-            List<Integer> idPozycjaBibliotecznaList = wypozyczenieList.stream()
-                    .map(w -> w.getPozycjaBiblioteczna().getId())
-                    .toList();
+            List<Integer> idPozycjaBibliotecznaList = wypozyczenieList.stream().map(w -> w.getPozycjaBiblioteczna().getId()).toList();
 
-            TypedQuery<PozycjaBiblioteczna> queryPozycjaBiblioteczna = entityManager.createQuery(
-                    "SELECT pb FROM PozycjaBiblioteczna pb WHERE pb.id IN :idPozycjaBibliotecznaList",
-                    PozycjaBiblioteczna.class);
+            TypedQuery<PozycjaBiblioteczna> queryPozycjaBiblioteczna = entityManager.createQuery("SELECT pb FROM PozycjaBiblioteczna pb WHERE pb.id IN :idPozycjaBibliotecznaList", PozycjaBiblioteczna.class);
             queryPozycjaBiblioteczna.setParameter("idPozycjaBibliotecznaList", idPozycjaBibliotecznaList);
 
             return queryPozycjaBiblioteczna.getResultList();
@@ -140,19 +162,13 @@ public class UzytkownikDaoImpl extends GenericDaoImpl<Uzytkownik, Integer> imple
     @Override
     public List<PozycjaBiblioteczna> zwrocOddanePozycjaBiblioteczna(int idUzytkownik) {
         try {
-            TypedQuery<Wypozyczenie> queryWypozyczenie = entityManager.createQuery(
-                    "SELECT w FROM Wypozyczenie w WHERE w.dataZwrotu IS NOT NULL AND w.uzytkownik.id = :idUzytkownik",
-                    Wypozyczenie.class);
+            TypedQuery<Wypozyczenie> queryWypozyczenie = entityManager.createQuery("SELECT w FROM Wypozyczenie w WHERE w.dataZwrotu IS NOT NULL AND w.uzytkownik.id = :idUzytkownik", Wypozyczenie.class);
             queryWypozyczenie.setParameter("idUzytkownik", idUzytkownik);
             List<Wypozyczenie> wypozyczenieList = queryWypozyczenie.getResultList();
 
-            List<Integer> idPozycjaBibliotecznaList = wypozyczenieList.stream()
-                    .map(w -> w.getPozycjaBiblioteczna().getId())
-                    .toList();
+            List<Integer> idPozycjaBibliotecznaList = wypozyczenieList.stream().map(w -> w.getPozycjaBiblioteczna().getId()).toList();
 
-            TypedQuery<PozycjaBiblioteczna> queryPozycjaBiblioteczna = entityManager.createQuery(
-                    "SELECT pb FROM PozycjaBiblioteczna pb WHERE pb.id IN :idPozycjaBibliotecznaList",
-                    PozycjaBiblioteczna.class);
+            TypedQuery<PozycjaBiblioteczna> queryPozycjaBiblioteczna = entityManager.createQuery("SELECT pb FROM PozycjaBiblioteczna pb WHERE pb.id IN :idPozycjaBibliotecznaList", PozycjaBiblioteczna.class);
             queryPozycjaBiblioteczna.setParameter("idPozycjaBibliotecznaList", idPozycjaBibliotecznaList);
 
             return queryPozycjaBiblioteczna.getResultList();
