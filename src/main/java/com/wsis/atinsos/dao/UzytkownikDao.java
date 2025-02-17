@@ -12,10 +12,8 @@ public interface UzytkownikDao extends GenericDao<Uzytkownik, Integer> {
     boolean wypiszZPrzedmiot(int idPrzedmiot, int idUzytkownik);
     double zwrocOcenaZPrzedmiot(int idPrzedmiot, int idUzytkownik);
     List<Przedmiot> zwrocListePrzypisanychPrzedmitow(int idUzytkownik);
-    List<Przedmiot> zwrocPlanZajec(int idUzytkownik);
     List<PozycjaBiblioteczna> zwrocListeWypozyczonychPozycjaBiblioteczna(int idUzytkownik);
     List<PozycjaBiblioteczna> zwrocPrzeterminowanePozycjaBiblioteczna(int idUzytkownik);
     List<PozycjaBiblioteczna> zwrocOddanePozycjaBiblioteczna(int idUzytkownik);
-    Platnosc zwrocPlatnosc(int idUzytkownik);
     boolean zmienAres(int idUzytkownik, String adres1, String adres2);
 }

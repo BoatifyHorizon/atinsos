@@ -111,15 +111,6 @@ public class UzytkownikDaoImplTest {
     }
 
     @Test
-    public void testZwrocPlanZajec() {
-        // Metoda powinna rzucać Error z komunikatem "TO nie ma sensu"
-        Error error = assertThrows(Error.class, () -> {
-            uzytkownikDao.zwrocPlanZajec(uzytkownik.getId());
-        });
-        assertTrue(error.getMessage().contains("TO nie ma sensu"), "Error message should indicate method is not implemented");
-    }
-
-    @Test
     public void testZwrocListeWypozyczonychPozycjaBiblioteczna() {
         // Tworzymy PozycjaBiblioteczna i Wypozyczenie dla użytkownika
         PozycjaBiblioteczna pb = new PozycjaBiblioteczna();
@@ -183,15 +174,6 @@ public class UzytkownikDaoImplTest {
         assertNotNull(lista, "List should not be null");
         assertFalse(lista.isEmpty(), "List should contain items");
         assertEquals(pb.getId(), lista.get(0).getId(), "Returned PozycjaBiblioteczna should match");
-    }
-
-    @Test
-    public void testZwrocPlatnosc() {
-        // Metoda ma rzucać Error z komunikatem "Czy to ma sens?"
-        Error error = assertThrows(Error.class, () -> {
-            uzytkownikDao.zwrocPlatnosc(uzytkownik.getId());
-        });
-        assertTrue(error.getMessage().contains("Czy to ma sens"), "Error message should indicate method is not implemented");
     }
 
     @Test

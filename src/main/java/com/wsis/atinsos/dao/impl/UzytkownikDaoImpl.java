@@ -117,12 +117,6 @@ public class UzytkownikDaoImpl extends GenericDaoImpl<Uzytkownik, Integer> imple
     }
 
     @Override
-    public List<Przedmiot> zwrocPlanZajec(int idUzytkownik) {
-        // To nie ma sensu w naszej bazie jak jest zwrocListePrzypisanychPrzedmitow
-        throw new Error("TO nie ma sensu");
-    }
-
-    @Override
     public List<PozycjaBiblioteczna> zwrocListeWypozyczonychPozycjaBiblioteczna(int idUzytkownik) {
         try {
             TypedQuery<Wypozyczenie> queryWypozyczenie = entityManager.createQuery("SELECT w FROM Wypozyczenie w WHERE w.uzytkownik.id = :idUzytkownik", Wypozyczenie.class);
@@ -176,12 +170,6 @@ public class UzytkownikDaoImpl extends GenericDaoImpl<Uzytkownik, Integer> imple
         } catch (Exception e) {
             throw new Error("Blad przy pobieraniu oddanych pozycji bibliotecznych");
         }
-    }
-
-    @Override
-    public Platnosc zwrocPlatnosc(int idUzytkownik) {
-        // Czy to ma sens? Nie lista płatności czasem?
-        throw new Error("Czy to ma sens?");
     }
 
     @Override
