@@ -3,12 +3,12 @@ package com.wsis.atinsos.dao.impl;
 import java.sql.Timestamp;
 import java.time.Instant;
 
-import com.wsis.atinsos.IdGenerator;
 import org.springframework.stereotype.Repository;
 
+import com.wsis.atinsos.IdGenerator;
 import com.wsis.atinsos.dao.MenedzerLogowaniaDao;
 import com.wsis.atinsos.model.ProbaLogowania;
-import com.wsis.atinsos.model.StatusKonta; // Twój enum
+import com.wsis.atinsos.model.StatusKonta;
 import com.wsis.atinsos.model.Uzytkownik;
 
 import jakarta.persistence.EntityManager;
