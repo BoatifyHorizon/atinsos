@@ -3,9 +3,9 @@ package com.wsis.atinsos.dao.impl;
 import java.sql.Timestamp;
 import java.time.Instant;
 
-import com.wsis.atinsos.dao.ZarzadzanieKontemDao;
 import org.springframework.stereotype.Repository;
 
+import com.wsis.atinsos.dao.ZarzadzanieKontemDao;
 import com.wsis.atinsos.model.Uzytkownik;
 
 import jakarta.persistence.EntityManager;
@@ -60,8 +60,7 @@ public class ZarzadzanieKontemDaoImpl implements ZarzadzanieKontemDao {
         Uzytkownik u = entityManager.createQuery("SELECT usr FROM Uzytkownik usr WHERE usr.email = :em", Uzytkownik.class).setParameter("em", email).getResultStream().findFirst().orElse(null);
 
         if (u != null) {
-            u.setHaslo("reset123"); // lub generujemy losowe hasło i wysyłamy je e-mailem
-            // i.e sendEmail(u.getEmail(), "Nowe hasło: " + noweHaslo);
+            u.setHaslo("reset123");
             entityManager.merge(u);
         }
     }

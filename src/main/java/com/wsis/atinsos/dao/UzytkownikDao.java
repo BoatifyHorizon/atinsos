@@ -2,7 +2,6 @@ package com.wsis.atinsos.dao;
 
 import java.util.List;
 
-import com.wsis.atinsos.model.Platnosc;
 import com.wsis.atinsos.model.PozycjaBiblioteczna;
 import com.wsis.atinsos.model.Przedmiot;
 import com.wsis.atinsos.model.Uzytkownik;

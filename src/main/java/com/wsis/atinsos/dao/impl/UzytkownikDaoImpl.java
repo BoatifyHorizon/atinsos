@@ -4,14 +4,12 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Random;
 
-import com.wsis.atinsos.IdGenerator;
 import org.springframework.stereotype.Repository;
 
+import com.wsis.atinsos.IdGenerator;
 import com.wsis.atinsos.dao.UzytkownikDao;
 import com.wsis.atinsos.model.Adres;
-import com.wsis.atinsos.model.Platnosc;
 import com.wsis.atinsos.model.PozycjaBiblioteczna;
 import com.wsis.atinsos.model.Przedmiot;
 import com.wsis.atinsos.model.PrzedmiotStudenta;
@@ -33,23 +31,19 @@ public class UzytkownikDaoImpl extends GenericDaoImpl<Uzytkownik, Integer> imple
             Uzytkownik uzytkownik = entityManager.find(Uzytkownik.class, idUzytkownik);
             Przedmiot przedmiot = entityManager.find(Przedmiot.class, idPrzedmiot);
 
-            // Sprawdzamy, czy obiekt w ogóle istnieje
             if (uzytkownik == null || przedmiot == null) {
                 return false;
             }
 
-            // Sprawdzamy, czy już istnieje w tabeli PrzedmiotStudenta
             TypedQuery<PrzedmiotStudenta> query = entityManager.createQuery("SELECT ps FROM PrzedmiotStudenta ps " + "WHERE ps.student.id = :uId AND ps.przedmiot.id = :pId", PrzedmiotStudenta.class);
             query.setParameter("uId", idUzytkownik);
             query.setParameter("pId", idPrzedmiot);
 
             List<PrzedmiotStudenta> lista = query.getResultList();
-            // Jeśli jest już zarejestrowany na ten przedmiot, nic nie robimy
             if (!lista.isEmpty()) {
                 return false;
             }
 
-            // Tworzymy nowy wpis w tabeli łączącej
             PrzedmiotStudenta ps = new PrzedmiotStudenta();
             ps.setId(IdGenerator.generateNumericId());
             ps.setStudent(uzytkownik);
@@ -71,10 +65,9 @@ public class UzytkownikDaoImpl extends GenericDaoImpl<Uzytkownik, Integer> imple
 
             List<PrzedmiotStudenta> lista = query.getResultList();
             if (lista.isEmpty()) {
-                return false; // student nie był zapisany
+                return false;
             }
 
-            // Wypisujemy (usuwamy) wszystkie pasujące wiersze
             for (PrzedmiotStudenta ps : lista) {
                 entityManager.remove(ps);
             }
